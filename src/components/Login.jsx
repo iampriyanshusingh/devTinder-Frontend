@@ -1,17 +1,31 @@
 import axios from "axios";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { addUser } from "../utils/userSlice";
+import { useNavigate } from "react-router-dom";
+import { BASE_URL } from "../utils/constants";
 
 const Login = () => {
-  const [emailId, setEmailId] = useState("elonmusk@gmail.com");
-  const [password, setPassword] = useState("Elon@123");
+  const [email, setEmailId] = useState("shreya@gmail.com");
+  const [password, setPassword] = useState("Shreya@123");
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleLogin = async () => {
     // API call to login
     try {
-      await axios.post("http://localhost:3000/login", {
-        emailId,
-        password,
-      });
+      const res = await axios.post(
+        BASE_URL + "/login",
+        {
+          email,
+          password,
+        },
+        {
+          withCredentials: true,
+        }
+      );
+      dispatch(addUser(res.data));
+      return navigate("/");
     } catch (err) {
       console.error(err);
     }
@@ -29,7 +43,7 @@ const Login = () => {
                 type="text"
                 className="input"
                 placeholder="Enter Your Email ID"
-                value={emailId}
+                value={email}
                 onChange={(e) => setEmailId(e.target.value)}
               />
               <legend className="fieldset-legend">Password</legend>
