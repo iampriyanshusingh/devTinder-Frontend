@@ -1,4 +1,5 @@
 import { Routes, Route, Navigate } from "react-router-dom";
+import { Provider } from "react-redux";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import { DarkModeProvider } from "./contexts/DarkModeContext";
 import Navbar from "./components/Navbar";
@@ -9,6 +10,7 @@ import Profile from "./pages/Profile";
 import Feed from "./pages/Feed";
 import Connections from "./pages/Connections";
 import Requests from "./pages/Requests";
+import store from "./store/store";
 import "./App.css";
 
 // Protected Route Component
@@ -34,7 +36,7 @@ const AppRoutes = () => {
   const { user } = useAuth();
 
   return (
-    <div className="min-h-screen bg-bg-secondary">
+    <div className="min-h-screen bg-bg-secondary dark:bg-gray-900">
       <Navbar />
       <main className="pt-16">
         <Routes>
@@ -88,11 +90,13 @@ const AppRoutes = () => {
 // Main App Component
 const App = () => {
   return (
-    <AuthProvider>
-      <DarkModeProvider>
-        <AppRoutes />
-      </DarkModeProvider>
-    </AuthProvider>
+    <Provider store={store}>
+      <AuthProvider>
+        <DarkModeProvider>
+          <AppRoutes />
+        </DarkModeProvider>
+      </AuthProvider>
+    </Provider>
   );
 };
 

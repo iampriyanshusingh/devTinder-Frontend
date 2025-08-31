@@ -40,21 +40,21 @@ const Connections = () => {
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading connections...</p>
+          <p className="text-gray-600 dark:text-gray-300">Loading connections...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-primary-50 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-primary-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 py-8">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">
+          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-2">
             Your Connections
           </h1>
-          <p className="text-gray-600">
+          <p className="text-gray-600 dark:text-gray-300">
             Developers you've successfully connected with
           </p>
         </div>
@@ -66,10 +66,10 @@ const Connections = () => {
             className="text-center py-12"
           >
             <div className="text-6xl mb-4 opacity-30">🤝</div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
               No connections yet
             </h2>
-            <p className="text-gray-600">
+            <p className="text-gray-600 dark:text-gray-300">
               Start swiping through developers to make your first connection!
             </p>
           </motion.div>
@@ -86,9 +86,9 @@ const Connections = () => {
                 <div className="card-body text-center">
                   {/* Profile Image */}
                   <div className="mb-4">
-                    {connection.photoURL ? (
+                    {connection.photo ? (
                       <img
-                        src={connection.photoURL}
+                        src={connection.photo}
                         alt={connection.firstName}
                         className="profile-image medium mx-auto"
                       />
@@ -118,32 +118,46 @@ const Connections = () => {
                     )}
                   </div>
 
-                  {/* Skills */}
-                  {connection.skills && connection.skills.length > 0 && (
-                    <div className="mb-4">
-                      <h4 className="text-sm font-medium text-gray-700 mb-2 flex items-center justify-center gap-2">
-                        <FaCode className="w-4 h-4" />
-                        Skills
-                      </h4>
-                      <div className="flex flex-wrap gap-1 justify-center">
-                        {connection.skills
-                          .slice(0, 3)
-                          .map((skill, skillIndex) => (
-                            <span
-                              key={skillIndex}
-                              className="skill-tag text-xs"
-                            >
-                              {skill}
-                            </span>
-                          ))}
-                        {connection.skills.length > 3 && (
-                          <span className="text-xs text-gray-500">
-                            +{connection.skills.length - 3} more
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  )}
+                                     {/* About Section */}
+                   {connection.about && (
+                     <div className="mb-4">
+                       <h4 className="text-sm font-medium text-gray-700 mb-2">
+                         About
+                       </h4>
+                       <p className="text-gray-600 text-sm leading-relaxed px-4">
+                         {connection.about.length > 100 
+                           ? `${connection.about.substring(0, 100)}...` 
+                           : connection.about}
+                       </p>
+                     </div>
+                   )}
+
+                   {/* Skills */}
+                   {connection.skills && connection.skills.length > 0 && (
+                     <div className="mb-4">
+                       <h4 className="text-sm font-medium text-gray-700 mb-2 flex items-center justify-center gap-2">
+                         <FaCode className="w-4 h-4" />
+                         Skills
+                       </h4>
+                       <div className="flex flex-wrap gap-1 justify-center">
+                         {connection.skills
+                           .slice(0, 3)
+                           .map((skill, skillIndex) => (
+                             <span
+                               key={skillIndex}
+                               className="skill-tag text-xs"
+                             >
+                               {skill}
+                             </span>
+                           ))}
+                         {connection.skills.length > 3 && (
+                           <span className="text-xs text-gray-500">
+                             +{connection.skills.length - 3} more
+                           </span>
+                         )}
+                       </div>
+                     </div>
+                   )}
 
                   {/* Action Buttons */}
                   <div className="flex gap-2">

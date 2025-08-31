@@ -12,6 +12,8 @@ import {
   FaBirthdayCake,
   FaVenusMars,
   FaCodeBranch,
+  FaCamera,
+  FaTrash,
 } from "react-icons/fa";
 
 const Signup = () => {
@@ -24,12 +26,15 @@ const Signup = () => {
     age: "",
     Gender: "",
     skills: [],
+    photo: null,
+    about: "",
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState({});
   const [skillInput, setSkillInput] = useState("");
+  const [photoPreview, setPhotoPreview] = useState(null);
 
   const { signup } = useAuth();
   const navigate = useNavigate();
@@ -64,6 +69,60 @@ const Signup = () => {
       ...prev,
       skills: prev.skills.filter((skill) => skill !== skillToRemove),
     }));
+  };
+
+  const handlePhotoChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      // Validate file type
+      if (!file.type.startsWith('image/')) {
+        setErrors((prev) => ({
+          ...prev,
+          photo: "Please select an image file"
+        }));
+        return;
+      }
+      
+      // Validate file size (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        setErrors((prev) => ({
+          ...prev,
+          photo: "Image size should be less than 5MB"
+        }));
+        return;
+      }
+
+      setFormData((prev) => ({
+        ...prev,
+        photo: file,
+      }));
+      
+      // Create preview
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setPhotoPreview(e.target.result);
+      };
+      reader.readAsDataURL(file);
+      
+      // Clear photo error
+      if (errors.photo) {
+        setErrors((prev) => ({
+          ...prev,
+          photo: "",
+        }));
+      }
+    }
+  };
+
+  const removePhoto = () => {
+    setFormData((prev) => ({
+      ...prev,
+      photo: null,
+    }));
+    setPhotoPreview(null);
+    // Clear photo input
+    const fileInput = document.getElementById('photo');
+    if (fileInput) fileInput.value = '';
   };
 
   const validateForm = () => {
@@ -131,7 +190,7 @@ const Signup = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-primary-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-primary-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 py-12 px-4 sm:px-6 lg:px-8">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -428,6 +487,138 @@ const Signup = () => {
                 </motion.p>
               )}
             </div>
+          </div>
+
+          {/* Photo Upload */}
+          <div>
+            <label
+              htmlFor="photo"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
+              Profile Photo
+            </label>
+            <div className="flex items-center space-x-3">
+              <div className="relative w-16 h-16 rounded-full overflow-hidden bg-gray-100">
+                {photoPreview ? (
+                  <img
+                    src={photoPreview}
+                    alt="Profile Preview"
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center text-gray-400">
+                    <FaCamera className="text-3xl" />
+                  </div>
+                )}
+                <input
+                  type="file"
+                  id="photo"
+                  name="photo"
+                  accept="image/*"
+                  onChange={handlePhotoChange}
+                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                />
+              </div>
+              {formData.photo && (
+                <button
+                  type="button"
+                  onClick={removePhoto}
+                  className="btn btn-secondary px-4"
+                >
+                  <FaTrash className="h-5 w-5 text-gray-500" />
+                </button>
+              )}
+              {errors.photo && (
+                <motion.p
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="mt-1 text-sm text-red-600"
+                >
+                  {errors.photo}
+                </motion.p>
+              )}
+            </div>
+          </div>
+
+          {/* Photo Upload */}
+          <div className="md:col-span-2">
+            <label
+              htmlFor="photo"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
+              Profile Photo
+            </label>
+            <div className="flex items-center space-x-4">
+              <div className="photo-upload-area">
+                {photoPreview ? (
+                  <img
+                    src={photoPreview}
+                    alt="Profile Preview"
+                    className="photo-preview"
+                  />
+                ) : (
+                  <div className="photo-placeholder">
+                    <FaCamera className="text-2xl mb-1" />
+                    <span className="text-xs text-center">Click to upload</span>
+                  </div>
+                )}
+                <input
+                  type="file"
+                  id="photo"
+                  name="photo"
+                  accept="image/*"
+                  onChange={handlePhotoChange}
+                  className="photo-upload-input"
+                />
+              </div>
+              <div className="flex-1">
+                <p className="text-sm text-gray-500 mb-2">
+                  Upload a profile photo to help others recognize you
+                </p>
+                {formData.photo && (
+                  <div className="flex items-center space-x-2">
+                    <span className="text-sm text-gray-600">
+                      Selected: {formData.photo.name}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={removePhoto}
+                      className="text-red-500 hover:text-red-700 transition-colors"
+                    >
+                      <FaTrash className="h-4 w-4" />
+                    </button>
+                  </div>
+                )}
+                {errors.photo && (
+                  <motion.p
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="text-sm text-red-600"
+                  >
+                    {errors.photo}
+                  </motion.p>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* About Section */}
+          <div className="md:col-span-2">
+            <label
+              htmlFor="about"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
+              About Me
+            </label>
+            <textarea
+              id="about"
+              name="about"
+              value={formData.about}
+              onChange={handleChange}
+              className="form-textarea"
+              placeholder="Tell us about yourself, your interests, and what you're looking for..."
+              rows="4"
+            />
           </div>
 
           {/* Skills */}

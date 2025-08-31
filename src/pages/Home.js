@@ -44,7 +44,7 @@ const Home = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-primary-50">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-primary-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
       {/* Hero Section */}
       <section className="relative overflow-hidden pt-20 pb-32">
         <div className="absolute inset-0 bg-gradient-to-r from-primary-600/10 to-secondary-600/10"></div>
@@ -59,11 +59,11 @@ const Home = () => {
               <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-primary-500 to-primary-700 rounded-2xl shadow-2xl mb-6">
                 <FaCode className="text-white text-3xl" />
               </div>
-              <h1 className="text-5xl md:text-7xl font-bold text-gray-900 mb-6">
+              <h1 className="text-5xl md:text-7xl font-bold text-gray-900 dark:text-white mb-6">
                 Welcome to{' '}
                 <span className="text-gradient">DevTinder</span>
               </h1>
-              <p className="text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+              <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed">
                 The ultimate platform for developers to connect, collaborate, and grow together. 
                 Swipe right on amazing opportunities and build your dream tech network.
               </p>
@@ -98,8 +98,8 @@ const Home = () => {
         <div className="absolute bottom-20 left-1/4 w-12 h-12 bg-success-200 rounded-full opacity-20 animate-bounce-gentle" style={{ animationDelay: '2s' }}></div>
       </section>
 
-      {/* Features Section */}
-      <section className="py-20 bg-white">
+             {/* Features Section */}
+       <section className="py-20 bg-white dark:bg-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -108,12 +108,12 @@ const Home = () => {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">
-              Why Choose DevTinder?
-            </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              We've built the perfect platform for developers to connect and grow together
-            </p>
+                         <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+               Why Choose DevTinder?
+             </h2>
+             <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+               We've built the perfect platform for developers to connect and grow together
+             </p>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -131,12 +131,12 @@ const Home = () => {
                   <div className="w-16 h-16 bg-gradient-to-br from-primary-500 to-primary-700 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg">
                     <Icon className="text-white text-2xl" />
                   </div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-3">
-                    {feature.title}
-                  </h3>
-                  <p className="text-gray-600 leading-relaxed">
-                    {feature.description}
-                  </p>
+                                     <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">
+                     {feature.title}
+                   </h3>
+                   <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
+                     {feature.description}
+                   </p>
                 </motion.div>
               );
             })}
@@ -169,8 +169,8 @@ const Home = () => {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-20 bg-gray-50">
+             {/* CTA Section */}
+       <section className="py-20 bg-gray-50 dark:bg-gray-900">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -178,12 +178,12 @@ const Home = () => {
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-4xl font-bold text-gray-900 mb-6">
-              Ready to Start Your Developer Journey?
-            </h2>
-            <p className="text-xl text-gray-600 mb-8">
-              Join thousands of developers who are already building amazing connections and advancing their careers.
-            </p>
+                         <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-6">
+               Ready to Start Your Developer Journey?
+             </h2>
+             <p className="text-xl text-gray-600 dark:text-gray-300 mb-8">
+               Join thousands of developers who are already building amazing connections and advancing their careers.
+             </p>
             <Link
               to="/signup"
               className="btn btn-primary btn-lg"

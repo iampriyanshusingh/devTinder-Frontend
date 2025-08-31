@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useDispatch } from "react-redux";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { incrementPendingCount } from "../store/requestSlice";
 import {
   FaHeart,
   FaTimes,
@@ -17,6 +19,7 @@ import {
 } from "react-icons/fa";
 
 const Feed = () => {
+  const dispatch = useDispatch();
   const [users, setUsers] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -70,6 +73,11 @@ const Feed = () => {
 
       toast.success(action === "like" ? "Interest sent!" : "User ignored");
 
+      // Increment pending count if interest was sent
+      if (action === "like") {
+        dispatch(incrementPendingCount());
+      }
+
       // Remove current user from feed and move to next
       setUsers((prev) => prev.filter((user) => user._id !== userId));
       setCurrentIndex((prev) => Math.min(prev, users.length - 2));
@@ -92,6 +100,9 @@ const Feed = () => {
         { withCredentials: true }
       );
       toast.success("Super like sent! 🚀");
+
+      // Increment pending count for super like
+      dispatch(incrementPendingCount());
 
       // Remove current user from feed
       setUsers((prev) => prev.filter((user) => user._id !== userId));
@@ -155,7 +166,7 @@ const Feed = () => {
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading developers...</p>
+                     <p className="text-gray-600 dark:text-gray-300">Loading developers...</p>
         </div>
       </div>
     );
@@ -166,10 +177,10 @@ const Feed = () => {
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <div className="text-6xl mb-4 opacity-30">👥</div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">
-            No developers found
-          </h2>
-          <p className="text-gray-600 mb-4">
+                     <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+             No developers found
+           </h2>
+           <p className="text-gray-600 dark:text-gray-300 mb-4">
             {searchTerm || Object.values(filters).some((f) => f)
               ? "Try adjusting your search or filters"
               : "Check back later for new developers"}
@@ -185,14 +196,14 @@ const Feed = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-primary-50 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-primary-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 py-8">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">
+          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-2">
             Discover Developers
           </h1>
-          <p className="text-gray-600">
+          <p className="text-gray-600 dark:text-gray-300">
             Swipe through amazing developers and make meaningful connections
           </p>
         </div>
@@ -229,11 +240,11 @@ const Feed = () => {
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: "auto" }}
                 exit={{ opacity: 0, height: 0 }}
-                className="bg-white rounded-xl p-6 shadow-medium border border-gray-200"
+                className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-medium border border-gray-200 dark:border-gray-700"
               >
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
                       Gender
                     </label>
                     <select
@@ -254,7 +265,7 @@ const Feed = () => {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
                       Min Age
                     </label>
                     <input
@@ -273,7 +284,7 @@ const Feed = () => {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
                       Max Age
                     </label>
                     <input
@@ -299,10 +310,10 @@ const Feed = () => {
                   >
                     Reset Filters
                   </button>
-                  <span className="text-sm text-gray-500">
-                    {filteredUsers.length} developer
-                    {filteredUsers.length !== 1 ? "s" : ""} found
-                  </span>
+                                     <span className="text-sm text-gray-500 dark:text-gray-400">
+                     {filteredUsers.length} developer
+                     {filteredUsers.length !== 1 ? "s" : ""} found
+                   </span>
                 </div>
               </motion.div>
             )}
@@ -317,7 +328,7 @@ const Feed = () => {
               <button
                 onClick={previousUser}
                 disabled={currentIndex === 0}
-                className="absolute left-4 top-1/2 transform -translate-y-1/2 z-10 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center text-gray-600 hover:text-primary-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+                                 className="absolute left-4 top-1/2 transform -translate-y-1/2 z-10 w-12 h-12 bg-white dark:bg-gray-800 rounded-full shadow-lg flex items-center justify-center text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
               >
                 <FaArrowLeft className="w-5 h-5" />
               </button>
@@ -325,7 +336,7 @@ const Feed = () => {
               <button
                 onClick={nextUser}
                 disabled={currentIndex === filteredUsers.length - 1}
-                className="absolute right-4 top-1/2 transform -translate-y-1/2 z-10 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center text-gray-600 hover:text-primary-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+                                 className="absolute right-4 top-1/2 transform -translate-y-1/2 z-10 w-12 h-12 bg-white dark:bg-gray-800 rounded-full shadow-lg flex items-center justify-center text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
               >
                 <FaArrowRight className="w-5 h-5" />
               </button>
@@ -344,9 +355,9 @@ const Feed = () => {
             <div className="card overflow-hidden">
               {/* User Image */}
               <div className="relative h-96 bg-gradient-to-br from-primary-100 to-secondary-100">
-                {currentUser?.photoURL ? (
+                {currentUser?.photo ? (
                   <img
-                    src={currentUser.photoURL}
+                    src={currentUser.photo}
                     alt={currentUser.firstName}
                     className="w-full h-full object-cover"
                   />
@@ -382,13 +393,25 @@ const Feed = () => {
 
               {/* User Details */}
               <div className="p-6">
+                {/* About Section */}
+                {currentUser?.about && (
+                  <div className="mb-4">
+                    <h3 className="text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
+                      About
+                    </h3>
+                    <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
+                      {currentUser.about}
+                    </p>
+                  </div>
+                )}
+
                 {/* Skills */}
                 {currentUser?.skills && currentUser.skills.length > 0 && (
                   <div className="mb-4">
-                    <h3 className="text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
-                      <FaCode className="w-4 h-4" />
-                      Skills & Technologies
-                    </h3>
+                                         <h3 className="text-sm font-medium text-gray-700 dark:text-gray-200 mb-2 flex items-center gap-2">
+                       <FaCode className="w-4 h-4 text-primary-600 dark:text-primary-400" />
+                       Skills & Technologies
+                     </h3>
                     <div className="flex flex-wrap gap-2">
                       {currentUser.skills.map((skill, index) => (
                         <span key={index} className="skill-tag">
@@ -443,9 +466,9 @@ const Feed = () => {
                 />
               ))}
             </div>
-            <p className="text-sm text-gray-500 mt-2">
-              {currentIndex + 1} of {filteredUsers.length}
-            </p>
+                         <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
+               {currentIndex + 1} of {filteredUsers.length}
+             </p>
           </div>
         </div>
 

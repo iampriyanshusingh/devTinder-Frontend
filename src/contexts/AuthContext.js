@@ -58,7 +58,32 @@ export const AuthProvider = ({ children }) => {
   const signup = async (userData) => {
     try {
       setLoading(true);
-      const response = await axios.post('/api/signup', userData);
+      
+      // Create FormData if photo is included
+      let dataToSend = userData;
+      if (userData.photo) {
+        const formData = new FormData();
+        Object.keys(userData).forEach(key => {
+          if (key === 'photo') {
+            formData.append('photo', userData.photo);
+          } else if (key === 'skills') {
+            formData.append('skills', JSON.stringify(userData.skills));
+          } else if (key === 'about') {
+            formData.append('about', userData.about);
+          } else {
+            formData.append(key, userData[key]);
+          }
+        });
+        dataToSend = formData;
+      }
+      
+      const response = await axios.post('/api/signup', dataToSend, {
+        headers: userData.photo ? {
+          'Content-Type': 'multipart/form-data',
+        } : {
+          'Content-Type': 'application/json',
+        }
+      });
       
       if (response.status === 200) {
         toast.success('Account created successfully! Please login.');
@@ -87,7 +112,29 @@ export const AuthProvider = ({ children }) => {
 
   const updateProfile = async (profileData) => {
     try {
-      const response = await axios.patch('/api/profile/edit', profileData, { withCredentials: true });
+      // Create FormData if photo is included
+      let dataToSend = profileData;
+      if (profileData.photo) {
+        const formData = new FormData();
+        Object.keys(profileData).forEach(key => {
+          if (key === 'photo') {
+            formData.append('photo', profileData.photo);
+          } else {
+            formData.append(key, profileData[key]);
+          }
+        });
+        dataToSend = formData;
+      }
+      
+      const response = await axios.patch('/api/profile/edit', dataToSend, { 
+        withCredentials: true,
+        headers: profileData.photo ? {
+          'Content-Type': 'multipart/form-data',
+        } : {
+          'Content-Type': 'application/json',
+        }
+      });
+      
       if (response.data?.data) {
         setUser(response.data.data);
         toast.success('Profile updated successfully!');
